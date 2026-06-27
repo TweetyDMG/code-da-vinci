@@ -20,7 +20,8 @@ services:
       POSTGRES_USER: app_user
       POSTGRES_PASSWORD: ${DB_PASSWORD:-1234}
     ports:
-      - "127.0.0.1:5432:5432"
+      # 5432 занят локальным PostgreSQL → хост-порт 5433
+      - "127.0.0.1:5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
       # SQL-скрипты выполнятся автоматически при первом запуске
@@ -37,7 +38,8 @@ services:
     container_name: codedavinci-app
     restart: unless-stopped
     ports:
-      - "127.0.0.1:8080:8080"
+      # 8080 занят другим Docker-контейнером → хост-порт 8081
+      - "127.0.0.1:8081:8080"
     environment:
       DB_URL: jdbc:postgresql://db:5432/course_project
       DB_USER: app_user
