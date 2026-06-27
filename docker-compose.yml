@@ -1,0 +1,52 @@
+# ══════════════════════════════════════════════════════════════
+# Code Da Vinci — Docker Compose
+#
+# Быстрый старт:
+#   docker compose up --build -d
+#
+# Остановка:
+#   docker compose down -v  (с удалением томов БД)
+# ══════════════════════════════════════════════════════════════
+
+services:
+
+  # ─── PostgreSQL ────────────────────────────────────────────
+  db:
+    image: postgres:16-alpine
+    container_name: codedavinci-db
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: course_project
+      POSTGRES_USER: app_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-1234}
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      # SQL-скрипты выполнятся автоматически при первом запуске
+      - ./sql:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U app_user -d course_project"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ─── Tomcat (Code Da Vinci) ────────────────────────────────
+  app:
+    build: .
+    container_name: codedavinci-app
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/course_project
+      DB_USER: app_user
+      DB_PASSWORD: ${DB_PASSWORD:-1234}
+      DB_POOL_SIZE: "10"
+    depends_on:
+      db:
+        condition: service_healthy
+
+volumes:
+  postgres_data:
+    driver: local

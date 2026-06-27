@@ -1,0 +1,51 @@
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+*.war
+*.ear
+
+### IDE - IntelliJ IDEA ###
+.idea/
+*.iml
+*.iws
+*.ipr
+out/
+*.class
+
+### IDE - Eclipse ###
+.project
+.classpath
+.settings/
+bin/
+
+### IDE - NetBeans ###
+nbproject/
+nb-configuration.xml
+
+### IDE - VS Code ###
+.vscode/
+
+### OS ###
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+### Java ###
+*.class
+*.jar
+*.log
+
+### Environment ###
+.env
+.env.local
+*.env.local
+
+### Uploaded avatars ###
+src/main/webapp/images/avatars/
+
+### Javadoc (generated) ###
+src/main/javadoc/
